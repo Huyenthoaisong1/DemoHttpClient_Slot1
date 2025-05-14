@@ -10,38 +10,38 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Net.Http;
 using System.Threading.Tasks;
-namespace DemoHttpClient_Slot1
+namespace DemoHttpClient_Slot1;
+
+/// <summary>
+/// Interaction logic for MainWindow.xaml
+/// </summary>
+public partial class MainWindow : Window
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+    public MainWindow()
     {
-        public MainWindow()
+        InitializeComponent();
+    }
+    readonly HttpClient client = new HttpClient();
+    private void btnClear_Click(object sender, RoutedEventArgs e)
+    {
+        txtContent.Text= string.Empty;
+    }
+
+
+    private void btnClose_Click(object sender, RoutedEventArgs e) => Close();
+
+    private async void btnViewHTML_Click(object sender, RoutedEventArgs e)
+    {
+        string uri = txtURL.Text;
+        try
         {
-            InitializeComponent();
+            string respondBody = await client.GetStringAsync(uri);
+            txtContent.Text = respondBody.Trim();
         }
-        readonly HttpClient client = new HttpClient();
-        private void btnClear_Click(object sender, RoutedEventArgs e)
+        catch (HttpRequestException ex)
         {
-            txtContent.Text= string.Empty;
+            MessageBox.Show($"Message : {ex.Message}");
         }
 
-        private async Task btnViewHTML_Click(object sender, RoutedEventArgs e)
-        {   
-            string uri = txtURL.Text;
-            try
-            {
-                string respondBody = await client.GetStringAsync(uri);
-                txtContent.Text = respondBody.Trim();
-            }
-            catch (HttpRequestException ex) {
-                MessageBox.Show($"Message : {ex.Message}");
-            }
-
-        }
-
-        private void btnClose_Click(object sender, RoutedEventArgs e) => Close();
-       
     }
 }
